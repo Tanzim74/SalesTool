@@ -171,6 +171,7 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\ReportManagerServiceProvider::class,
         App\Providers\ReportServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
