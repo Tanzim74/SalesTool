@@ -31,8 +31,17 @@ class ReportController extends Controller
         
         $reportData = $reportInstance->generateSalesReport([]);
 
-
         return response()->json($reportData);
+    }
+
+    public function salesByDate(Request $request)
+    {
+      $reportInstance =  $this->getReportInstance(0); // Assuming 1 is the report type for sales
+
+      $reportData = $reportInstance->getSalesReportByDate([]);
+      return response()->json($reportData);
+
+        
     }
 
     public function getReportCategory($reportType){

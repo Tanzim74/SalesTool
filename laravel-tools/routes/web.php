@@ -20,5 +20,7 @@ Route::get('/', function () {
 
 Route::get('/sales-report', [ReportController::class, 'getSales'])
     ->name('sales.report.index');
+Route::get('/salesByDate', [ReportController::class, 'salesByDate'])
+    ->name('sales.report.salesByDate');
 
 
