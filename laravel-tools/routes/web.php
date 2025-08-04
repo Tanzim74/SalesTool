@@ -18,9 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/sales-report', [ReportController::class, 'getSales'])
     ->name('sales.report.index');
 Route::get('/salesByDate', [ReportController::class, 'salesByDate'])
     ->name('sales.report.salesByDate');
+
+Route::get('/get-sales-summary', [ReportController::class, 'getSalesSummary'])
+    ->name('sales.summary');
 
 

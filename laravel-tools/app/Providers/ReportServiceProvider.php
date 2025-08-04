@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Reports\ReportGenerationInterface;
 use App\Services\SalesReportService;
+use App\Actions\SalesSummary\SalesSummary;
 class ReportServiceProvider extends ServiceProvider
 {
     /**

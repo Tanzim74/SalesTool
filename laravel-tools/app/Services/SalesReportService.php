@@ -3,8 +3,17 @@ namespace App\Services;
 use App\Reports\ReportGenerationInterface;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+// use App\Actions\SalesSummary\SalesSummary;
+use App\Services\ReportManager;
 class SalesReportService implements ReportGenerationInterface
 {
+    
+    protected $reportManager;
+     public function __construct(  ReportManager $reportManager  ) {
+       
+    // $this->report = $report;
+    $this->reportManager = $reportManager;
+    }
     public function generateSalesReport(array $filters): array
     {
         // Logic to generate sales report based on filters
@@ -15,7 +24,7 @@ class SalesReportService implements ReportGenerationInterface
     public function getMonthlySalesReport(array $filters): array
     {
         // Logic to generate monthly sales report based on filters
-        return Product::whereMonth('created_at', now()->month)->get()->toArray(); // Example logic, replace with actual filtering logic
+       return []; // Example logic, replace with actual filtering logic
     }
 
     public function getSalesReportByDate(array $filters): array
@@ -33,5 +42,17 @@ class SalesReportService implements ReportGenerationInterface
 
         return $salesReportByDate; // Example logic, replace with actual filtering logic
     }
+
+    public function performanceSummary($reportType){
+
+     $totalSales = $this->reportManager->getReportInstance($reportType)->totalSales();
+     
+     return $totalSales; // Example logic, replace with actual summary logic   
+        
+
+    }
+
+
+
     
 }

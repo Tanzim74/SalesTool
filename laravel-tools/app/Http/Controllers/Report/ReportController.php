@@ -19,6 +19,7 @@ class ReportController extends Controller
     }
 
     public function getReportInstance($reportType) {
+        
         // Logic to get report instance based on type
         $reportInstance = $this->reportManager->getReportInstance($reportType);
         return $reportInstance;
@@ -42,6 +43,15 @@ class ReportController extends Controller
       return response()->json($reportData);
 
         
+    }
+
+    public function getSalesSummary(){
+        
+        $reportInstance =  $this->getReportInstance(0); // Assuming 5 is the report type for summary
+
+        $reportData = $reportInstance->performanceSummary(5);
+        
+        return response()->json($reportData);
     }
 
     public function getReportCategory($reportType){

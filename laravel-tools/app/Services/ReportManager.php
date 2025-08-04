@@ -7,6 +7,7 @@ class ReportManager {
 
         
         $driver = config("report.report-type.$reportType", 'SALES');
+      
         $class = config("report.drivers.$driver", SalesReportService::class);
         
         return app()->make($class);
