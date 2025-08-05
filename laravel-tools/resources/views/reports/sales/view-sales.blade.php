@@ -51,7 +51,6 @@
             </div>
 
             <div class="row">
-
                 <div class="col-md-12 form-group mb-4 mt-2 p-3 d-flex justify-content-center">
                     <button id="loadReportBtn" class="btn btn-primary ripple m-1 generate" type="button"> Generate
                     </button>
@@ -96,7 +95,8 @@
                     },
                     body: JSON.stringify({
                         date: '2025-08-01',
-                        type: 'daily'
+                        type: 'daily',
+                        reportType : 0
                     })
                 })
                 .then(res => res.json())
