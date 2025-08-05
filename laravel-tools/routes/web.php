@@ -28,3 +28,6 @@ Route::get('/get-sales-summary', [ReportController::class, 'getSalesSummary'])
     ->name('sales.summary');
 
 
+Route::get('/view-sales' , [ReportController::class, 'viewSales'])->name('reports.sales');
+
+

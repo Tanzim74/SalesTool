@@ -25,6 +25,10 @@ class ReportController extends Controller
         return $reportInstance;
     }
 
+    public function viewSales(){
+    return view('reports.sales.view-sales');
+    }
+
     public function getSales()
     {
        
@@ -62,5 +66,7 @@ class ReportController extends Controller
         
         
     }
+
+
     
 }
