@@ -26,20 +26,20 @@
 
                 <div class="col-md-3 form-group mb-3">
                     <label for="picker2">Filter</label>
-                    <select class="form-control form-control-rounded">
-                        <option selected>Custom Date</option>
-                        <option>Weekly</option>
-                        <option>Monthly</option>
-                        <option>Yearly</option>
+                    <select class="form-control form-control-rounded filter">
+                        <option selected value="custom">Custom Date</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
                     </select>
                 </div>
 
                 <div class="col-md-3 form-group mb-3">
                     <label for="picker2">Status</label>
                     <select class="form-control form-control-rounded">
-                        <option>Processing</option>
-                        <option>Pending</option>
-                        <option>Completed</option>
+                        <option value="0">Processing</option>
+                        <option value="1">Pending</option>
+                        <option value="3">Completed</option>
                     </select>
                 </div>
 
@@ -75,30 +75,40 @@
     </script>
     <script>
         // Custom JavaScript for this page
-        $(document).ready(function() {
+        $(document).ready(function () {
+            $('.filter').on('change', function () {
+                const selectedFilter = $(this).val();
+                if (selectedFilter === 'custom') {
+                    
+                    $('.start_date, .end_date').prop('disabled', false);
+                }
+                else {
+                    $('.start_date, .end_date').prop('disabled', true);
 
+                }
+            });
         });
     </script>
 
     <script>
-        document.getElementById('loadReportBtn').addEventListener('click', function() {
+        document.getElementById('loadReportBtn').addEventListener('click', function () {
             const csrfToken = {{ csrf_token() }}
-            const startDate = document.querySelector('.start_date').value;
+                const startDate = document.querySelector('.start_date').value;
             const endDate = document.querySelector('.end_date').value;
 
 
             fetch('/sales', {
-                    method: 'get',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({
-                        date: '2025-08-01',
-                        type: 'daily',
-                        reportType : 0
-                    })
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    date: '2025-08-01',
+                    type: 'daily',
+                    reportType: 0
                 })
+            })
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('reportResult').innerText = JSON.stringify(data, null, 2);
