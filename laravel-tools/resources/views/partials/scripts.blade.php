@@ -7,3 +7,4 @@
     <script src="{{ asset('dist-assets/js/scripts/echart.options.min.js') }}"></script>
     <script src="{{ asset('dist-assets/js/scripts/dashboard.v1.script.min.js') }}"></script>
     <script src="{{ asset('dist-assets/js/scripts/customizer.script.min.js') }}"></script>
+    <script src="{{ asset('dist-assets/js/plugins/datatables.min.js') }}"></script>

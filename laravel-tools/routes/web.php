@@ -18,16 +18,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::controller(ReportController::class)->group(function () {
+    Route::post('/getColumns', [ReportController::class, 'getColumns'])->name('sales.report.get_columnns');
+    Route::post('/sales-report', [ReportController::class, 'getSales'])->name('sales.report.index');
+});
 
-Route::get('/sales-report', [ReportController::class, 'getSales'])
-    ->name('sales.report.index');
-Route::get('/salesByDate', [ReportController::class, 'salesByDate'])
-    ->name('sales.report.salesByDate');
+
+
+
 
 Route::get('/get-sales-summary', [ReportController::class, 'getSalesSummary'])
     ->name('sales.summary');
 
 
-Route::get('/view-sales' , [ReportController::class, 'viewSales'])->name('reports.sales');
-
-
+Route::get('/view-sales', [ReportController::class, 'viewSales'])->name('reports.sales');

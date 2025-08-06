@@ -36,10 +36,10 @@
 
                 <div class="col-md-3 form-group mb-3">
                     <label for="picker2">Status</label>
-                    <select class="form-control form-control-rounded">
+                    <select class="form-control form-control-rounded status">
                         <option value="0">Processing</option>
                         <option value="1">Pending</option>
-                        <option value="3">Completed</option>
+                        <option value="2">Completed</option>
                     </select>
                 </div>
 
@@ -59,12 +59,31 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive" id="attachment-table">
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+
+
 
 
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
     <script>
         flatpickr(".start_date", {
             dateFormat: "Y-m-d"
@@ -75,15 +94,16 @@
     </script>
     <script>
         // Custom JavaScript for this page
-        $(document).ready(function () {
-            $('.filter').on('change', function () {
+        $(document).ready(function() {
+            $('.filter').on('change', function() {
                 const selectedFilter = $(this).val();
                 if (selectedFilter === 'custom') {
-                    
+                    //    $('.start_date, .end_date').attr( 'placeholder','yyyy-mm-dd');
                     $('.start_date, .end_date').prop('disabled', false);
-                }
-                else {
+                } else {
                     $('.start_date, .end_date').prop('disabled', true);
+                    $('.start_date, .end_date').val('yyyy-mm-dd');
+                    $('.start_date, .end_date').attr('placeholder', 'yyyy-mm-dd');
 
                 }
             });
@@ -91,27 +111,62 @@
     </script>
 
     <script>
-        document.getElementById('loadReportBtn').addEventListener('click', function () {
-            const csrfToken = {{ csrf_token() }}
-                const startDate = document.querySelector('.start_date').value;
+        document.getElementById('loadReportBtn').addEventListener('click', function() {
+            const csrfToken = "{{ csrf_token() }}";
+            const startDate = document.querySelector('.start_date').value;
             const endDate = document.querySelector('.end_date').value;
+            const filterType = document.querySelector('.filter').value;
+            const status = document.querySelector('.status').value;
 
-
-            fetch('/sales', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    date: '2025-08-01',
-                    type: 'daily',
-                    reportType: 0
+            fetch('/getColumns', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        reportType: 0,
+                        start_date: startDate,
+                        end_date: endDate,
+                        filter: filterType,
+                        class: status
+                    })
                 })
-            })
                 .then(res => res.json())
                 .then(data => {
-                    document.getElementById('reportResult').innerText = JSON.stringify(data, null, 2);
+                    console.log('Report data:', data);
+                    document.getElementById('attachment-table').innerHTML = data.html;
+
+                    // Destroy existing DataTable if it exists
+                    // if ($.fn.DataTable.isDataTable('.salesTable')) {
+                    //     $('.salesTable').DataTable().destroy();
+                    // }
+                    
+
+                    setTimeout(() => {
+                        const columnDefs = data.columnKeys.map(key => ({
+                            data: key,
+                            
+                        }));
+
+                        $('.salesTable').DataTable({
+                            processing: true,
+                            serverSide: true,
+                            ajax: { // Fix: Changed from 'ajax' to 'ajax'
+                                url: '{{ route('sales.report.index') }}',
+                                type: 'POST',
+                                data: function(d) {
+                                    d.start_date = startDate;
+                                    d.end_date = endDate;
+                                    d.filter = filterType;
+                                    d.class = status;
+                                    d._token = csrfToken;
+                                }
+                            },
+                            columns: columnDefs,
+                            searchable:false,
+                        });
+                    }, 10);
                 })
                 .catch(err => {
                     console.error('Fetch error:', err);
