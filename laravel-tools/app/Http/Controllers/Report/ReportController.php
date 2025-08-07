@@ -16,9 +16,10 @@ class ReportController extends Controller
 
     protected $reportManager;
     protected $datatable;
-    public function __construct(ReportManager $reportManager, ReportDataTable $datatable)
+    protected $request;
+    public function __construct(ReportManager $reportManager, ReportDataTable $datatable , Request $request)
     {
-
+        $this->request = $request;
         $this->datatable = $datatable;
         $this->reportManager = $reportManager;
     }
@@ -34,14 +35,7 @@ class ReportController extends Controller
     public function getColumns()
     {
 
-        $headers = ['ID', 'Date', 'Customer', 'Total', 'Status'];
-        $columnKeys = ['id', 'date', 'customer_name', 'total_amount', 'payment_status'];
-        $html = view('datatables.sales-datatable', compact('headers'))->render();
-
-        return [
-            'columnKeys' => $columnKeys,
-            'html' => $html
-        ];
+        return $this->datatable->initializeHeaders();
     }
 
     public function viewSales()
@@ -49,12 +43,14 @@ class ReportController extends Controller
         return view('reports.sales.view-sales');
     }
 
-    public function getSales()
+    public function getSales(Request $request)
+
     {
         $reportInstance =  $this->getReportInstance(0); // Assuming 1 is the report type for sales
+        return $this->datatable->loadDataset($this->request);
 
-        $reportData = $reportInstance->generateSalesReport();
-        return $reportData;
+        // $reportData = $reportInstance->generateSalesReport( $request);
+        // return $reportData;
         // return response()->json($reportData);
 
     }

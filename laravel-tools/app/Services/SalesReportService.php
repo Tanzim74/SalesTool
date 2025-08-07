@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use App\DataTables\ReportDataTable;
 use App\Services\ReportManager;
-
+use Illuminate\Http\Request;
 class SalesReportService
 {
     protected $reportTable;
@@ -21,9 +21,14 @@ class SalesReportService
         $this->reportManager = $reportManager;
         $this->reportTable = $reportTable;
     }
-    public function generateSalesReport()
-    
+    public function generateSalesReport(Request $request)
     {
+    // $this->reportTable->loadDataset();
+  
+    
+    
+    
+
     $data = [];
     $customers = ['Tanzim', 'Alex', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'Robert', 'Olivia', 'William'];
     $statuses = ['paid', 'pending', 'failed'];

@@ -111,6 +111,7 @@
     </script>
 
     <script>
+
         document.getElementById('loadReportBtn').addEventListener('click', function() {
             const csrfToken = "{{ csrf_token() }}";
             const startDate = document.querySelector('.start_date').value;
@@ -155,16 +156,27 @@
                             ajax: { // Fix: Changed from 'ajax' to 'ajax'
                                 url: '{{ route('sales.report.index') }}',
                                 type: 'POST',
-                                data: function(d) {
-                                    d.start_date = startDate;
-                                    d.end_date = endDate;
-                                    d.filter = filterType;
-                                    d.class = status;
-                                    d._token = csrfToken;
+                                data:  {
+                                    reportType: 0,
+                                    start_date: startDate,
+                                    end_date: endDate,
+                                    filter: filterType,
+                                    class: status,
+                                    _token: "{{ csrf_token() }}"
                                 }
                             },
                             columns: columnDefs,
                             searchable:false,
+                            orderable: false,
+                             dom: 'Bfrtip', // B = Buttons, f = filter, r = processing, t = table, i = info, p = pagination
+        buttons: [
+            'copy',
+            'csv',
+            'excel',
+            'pdf',
+            'print',
+            'colvis' // column visibility toggle
+        ],
                         });
                     }, 10);
                 })
