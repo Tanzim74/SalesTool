@@ -17,7 +17,6 @@ class ReportDataTable
         $reportType = $this->reportType(0);
         
         
-        
         $headers = config("report_headers.$reportType.weekly.columns");
         
         $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
@@ -41,6 +40,8 @@ class ReportDataTable
         // dd($length , $start);
 
         $data = [];
+      
+      
         $customers = ['Tanzim', 'Alex', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'Robert', 'Olivia', 'William'];
         $statuses = ['paid', 'pending', 'failed'];
         $products = ['Laptop', 'Phone', 'Tablet', 'Monitor', 'Keyboard', 'Mouse', 'Printer', 'Headphones'];
