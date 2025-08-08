@@ -11,10 +11,17 @@ class ReportDataTable
 
 
 
+
     public function initializeHeaders()
     {
-        $headers = ['ID', 'Date', 'Customer', 'Total', 'Status'];
-        $columnKeys = ['id', 'date', 'customer_name', 'total_amount', 'payment_status'];
+        $reportType = $this->reportType(0);
+        
+        
+        
+        $headers = config("report_headers.$reportType.weekly.columns");
+        
+        $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
+        
         $html = view('datatables.sales-datatable', compact('headers'))->render();
 
         return [
@@ -23,6 +30,8 @@ class ReportDataTable
         ];
         // return $this->dataTables->queryBuilder($query);
     }
+
+    
 
     public function loadDataset($request)
     {
@@ -61,5 +70,12 @@ class ReportDataTable
             'recordsFiltered' => count($data),
             'data' => $sliced,
         ]);
+    }
+
+    public function reportType($type){
+        
+        $getReportType = config("report.report-type.$type");
+        
+        return $getReportType; 
     }
 }

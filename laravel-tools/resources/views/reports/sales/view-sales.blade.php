@@ -83,7 +83,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  
+
     <script>
         flatpickr(".start_date", {
             dateFormat: "Y-m-d"
@@ -111,7 +111,6 @@
     </script>
 
     <script>
-
         document.getElementById('loadReportBtn').addEventListener('click', function() {
             const csrfToken = "{{ csrf_token() }}";
             const startDate = document.querySelector('.start_date').value;
@@ -142,12 +141,12 @@
                     // if ($.fn.DataTable.isDataTable('.salesTable')) {
                     //     $('.salesTable').DataTable().destroy();
                     // }
-                    
+
 
                     setTimeout(() => {
                         const columnDefs = data.columnKeys.map(key => ({
                             data: key,
-                            
+
                         }));
 
                         $('.salesTable').DataTable({
@@ -156,7 +155,7 @@
                             ajax: { // Fix: Changed from 'ajax' to 'ajax'
                                 url: '{{ route('sales.report.index') }}',
                                 type: 'POST',
-                                data:  {
+                                data: {
                                     reportType: 0,
                                     start_date: startDate,
                                     end_date: endDate,
@@ -166,17 +165,9 @@
                                 }
                             },
                             columns: columnDefs,
-                            searchable:false,
+                            searchable: false,
                             orderable: false,
-                             dom: 'Bfrtip', // B = Buttons, f = filter, r = processing, t = table, i = info, p = pagination
-        buttons: [
-            'copy',
-            'csv',
-            'excel',
-            'pdf',
-            'print',
-            'colvis' // column visibility toggle
-        ],
+                           
                         });
                     }, 10);
                 })
