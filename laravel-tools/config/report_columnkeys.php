@@ -10,7 +10,8 @@ return [
                 1 => 'date',
                 2 => 'customer_name',
                 3 => 'total_amount',
-                4 => 'payment_status'
+                4 => 'payment_status',
+                5 => 'actions'
             ],
         ],
         'monthly' => [
@@ -21,7 +22,8 @@ return [
                 1 => 'date',
                 2 => 'customer_name',
                 3 => 'total_amount',
-                4 => 'payment_status'
+                4 => 'payment_status',
+                5 =>'actions'
             ],
             
         ]

@@ -6,55 +6,49 @@ use App\Reports\ReportGenerationInterface;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 // use App\Actions\SalesSummary\SalesSummary;
-use Yajra\DataTables\DataTables;
+
 use App\DataTables\ReportDataTable;
 use App\Services\ReportManager;
 use Illuminate\Http\Request;
+
 class SalesReportService
-{
+{   
+    protected $request;
     protected $reportTable;
     protected $reportManager;
-    public function __construct(ReportManager $reportManager, ReportDataTable $reportTable)
+    public function __construct(ReportManager $reportManager, ReportDataTable $reportTable , Request $request)
     {
-
         // $this->report = $report;
         $this->reportManager = $reportManager;
         $this->reportTable = $reportTable;
+        $this->request = $request;
     }
     public function generateSalesReport(Request $request)
     {
-    // $this->reportTable->loadDataset();
-  
-    
-    
-    
-
-    $data = [];
-    $customers = ['Tanzim', 'Alex', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'Robert', 'Olivia', 'William'];
-    $statuses = ['paid', 'pending', 'failed'];
-    $products = ['Laptop', 'Phone', 'Tablet', 'Monitor', 'Keyboard', 'Mouse', 'Printer', 'Headphones'];
-    
-    $startDate = strtotime('2020-01-01');
-    $endDate = strtotime('2023-12-31');
-    
-    for ($i = 1; $i <= 50000 ;$i++) {
-        $randomDays = rand(0, $endDate - $startDate);
-        $date = date('Y-m-d', $startDate + $randomDays);
+      
+        $length = $request->input('length') ?? 10; // 
+        $start = $request->input('start') ?? 0; //$offset = ($page - 1) * $length==start
+        $totalData = DB::table('orders')->count();
+        $query = DB::table('orders')
+        ->offset($start)
+        ->limit($length)
+        ->get()
+        ->map(function ($row) {
+            $row->actions = '
+                <a href="/orders/'.$row->id.'/edit" class="btn btn-sm btn-primary">Edit</a>
+                <a href="/orders/'.$row->id.'/delete" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</a>
+            ';
+            return $row;
+        });
         
-        $data[] = [
-            'id' => $i,
-            'date' => $date,
-            'customer_name' => $customers[array_rand($customers)] . ' ' . rand(1000, 9999),
-            'total_amount' => 0, // Will calculate below
-            'payment_status' => $statuses[array_rand($statuses)],
-
-        ];
-
-        $query = $data;
-     
+        // dd(count($query));
+        
+        // $filtered_query = array_slice($query, $start, $length);
+        // ->map(fn($row) => (array) $row)
+        // ->toArray();
+       
+        return $this->reportTable->initiateDataTableResponse($totalData,$query,$request);
     }
-    return DataTables::of(collect($query))->make(true);
-}
 
 
     public function getMonthlySalesReport(array $filters): array

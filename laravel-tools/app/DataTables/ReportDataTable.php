@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 class ReportDataTable
 {
 
-
-
-
     public function initializeHeaders()
     {
         $reportType = $this->reportType(0);
@@ -37,8 +34,7 @@ class ReportDataTable
 
         $length = $request->input('length');
         $start = $request->input('start');
-        // dd($length , $start);
-
+       
         $data = [];
       
       
@@ -72,6 +68,19 @@ class ReportDataTable
             'data' => $sliced,
         ]);
     }
+
+    public function  initiateDataTableResponse($totalData,$query, $request)
+    {
+        
+         return response([
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $totalData,
+            'recordsFiltered' => $totalData,
+            'data' => $query,
+        ]);
+    }
+
+    
 
     public function reportType($type){
         

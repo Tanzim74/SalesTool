@@ -8,7 +8,7 @@ use App\Reports\ReportGenerationInterface;
 use App\Services\ReportManager;
 use App\DataTables\ReportDataTable;
 
-
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 
@@ -17,7 +17,7 @@ class ReportController extends Controller
     protected $reportManager;
     protected $datatable;
     protected $request;
-    public function __construct(ReportManager $reportManager, ReportDataTable $datatable , Request $request)
+    public function __construct(ReportManager $reportManager, ReportDataTable $datatable, Request $request)
     {
         $this->request = $request;
         $this->datatable = $datatable;
@@ -34,6 +34,10 @@ class ReportController extends Controller
 
     public function getColumns()
     {
+        
+
+        
+     
 
         return $this->datatable->initializeHeaders();
     }
@@ -46,10 +50,11 @@ class ReportController extends Controller
     public function getSales(Request $request)
 
     {
-        $reportInstance =  $this->getReportInstance(0); // Assuming 1 is the report type for sales
-        return $this->datatable->loadDataset($this->request);
-
-        // $reportData = $reportInstance->generateSalesReport( $request);
+        $reportInstance =  $this->getReportInstance(0); // Assuming 0 is the report type for sales
+        
+        $reportData = $reportInstance->generateSalesReport( $request);
+        
+        return $reportData;
         // return $reportData;
         // return response()->json($reportData);
 

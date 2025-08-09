@@ -122,7 +122,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
                     },
                     body: JSON.stringify({
                         reportType: 0,

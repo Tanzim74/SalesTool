@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::controller(ReportController::class)->group(function () {
-    Route::post('/getColumns', [ReportController::class, 'getColumns'])->name('sales.report.get_columnns');
+    Route::post('/getColumns', [ReportController::class, 'getColumns'])->name('sales.report.get_columnns'); //later make it post
     Route::post('/sales-report', [ReportController::class, 'getSales'])->name('sales.report.index');
 });
 
