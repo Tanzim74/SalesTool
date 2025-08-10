@@ -167,7 +167,7 @@
                             columns: columnDefs,
                             searchable: false,
                             orderable: false,
-                           
+
                         });
                     }, 10);
                 })
@@ -175,6 +175,19 @@
                     console.error('Fetch error:', err);
                     document.getElementById('reportResult').innerText = 'Error loading report.';
                 });
+        });
+    </script>
+
+    <script>
+        $('.salesTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/search',
+                type: 'GET'
+            },
+            searchDelay: 500 // avoids too many queries while typing
+            columns: columnDefs
         });
     </script>
 @endpush

@@ -24,6 +24,8 @@ class ReportController extends Controller
         $this->reportManager = $reportManager;
     }
 
+   
+
     public function getReportInstance($reportType)
     {
 
@@ -50,10 +52,15 @@ class ReportController extends Controller
     public function getSales(Request $request)
 
     {
+        // dd($request->input('search'));
+      
+
         $reportInstance =  $this->getReportInstance(0); // Assuming 0 is the report type for sales
         
         $reportData = $reportInstance->generateSalesReport( $request);
         
+
+
         return $reportData;
         // return $reportData;
         // return response()->json($reportData);
