@@ -34,14 +34,11 @@ class ReportController extends Controller
         return $reportInstance;
     }
 
-    public function getColumns()
+    public function getColumns(Request $request)
     {
         
 
-        
-     
-
-        return $this->datatable->initializeHeaders();
+        return $this->datatable->initializeHeaders($request);
     }
 
     public function viewSales()
@@ -59,8 +56,7 @@ class ReportController extends Controller
         
         $reportData = $reportInstance->generateSalesReport( $request);
         
-
-
+        
         return $reportData;
         // return $reportData;
         // return response()->json($reportData);

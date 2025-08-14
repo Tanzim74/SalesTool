@@ -31,6 +31,7 @@
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
                         <option value="yearly">Yearly</option>
+                        <option value="All">All</option>
                     </select>
                 </div>
 
@@ -117,6 +118,7 @@
             const endDate = document.querySelector('.end_date').value;
             const filterType = document.querySelector('.filter').value;
             const status = document.querySelector('.status').value;
+            
 
             fetch('/getColumns', {
                     method: 'POST',

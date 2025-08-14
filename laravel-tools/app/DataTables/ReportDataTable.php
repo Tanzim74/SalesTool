@@ -9,14 +9,34 @@ use Illuminate\Http\Request;
 class ReportDataTable
 {
 
-    public function initializeHeaders()
+    public function initializeHeaders($request)
     {
         $reportType = $this->reportType(0);
+
+        $columnKeys = [];
+        $filter_type = $request->filter;
+        if($filter_type == 'All') {
+            $headers = config("report_headers.$reportType.all.columns");
+            $columnKeys = config("report_columnkeys.$reportType.all.columnkeys");
+            // dd($columnKeys);
+           
+        } elseif ($filter_type == 'weekly') {
+            $headers = config("report_headers.$reportType.weekly.columns");
+            $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
+        } elseif ($filter_type == 'monthly') {
+            $headers = config("report_headers.$reportType.monthly.columns");
+            $columnKeys = config("report_columnkeys.$reportType.monthly.columnkeys");
+        } elseif ($filter_type == 'yearly') {
+            $headers = config("report_headers.$reportType.yearly.columns");
+            $columnKeys = config("report_columnkeys.$reportType.yearly.columnkeys");
+        } else {
+            // Default case or error handling
+            $headers = [];
+            $columnKeys = [];
+        }
+        // $headers = config("report_headers.$reportType.weekly.columns");
         
-        
-        $headers = config("report_headers.$reportType.weekly.columns");
-        
-        $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
+        // $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
         
         $html = view('datatables.sales-datatable', compact('headers'))->render();
 
@@ -29,45 +49,7 @@ class ReportDataTable
 
     
 
-    public function loadDataset($request)
-    {
-
-        $length = $request->input('length');
-        $start = $request->input('start');
-       
-        $data = [];
-      
-      
-        $customers = ['Tanzim', 'Alex', 'Sarah', 'Michael', 'Jessica', 'David', 'Emily', 'Robert', 'Olivia', 'William'];
-        $statuses = ['paid', 'pending', 'failed'];
-        $products = ['Laptop', 'Phone', 'Tablet', 'Monitor', 'Keyboard', 'Mouse', 'Printer', 'Headphones'];
-
-        $startDate = strtotime('2020-01-01');
-        $endDate = strtotime('2023-12-31');
-
-        for ($i = 1; $i <= 100000; $i++) {
-            $randomDays = rand(0, $endDate - $startDate);
-            $date = date('Y-m-d', $startDate + $randomDays);
-
-            $data[] = [
-                'id' => $i,
-                'date' => $date,
-                'customer_name' => $customers[array_rand($customers)] . ' ' . rand(1000, 9999),
-                'total_amount' => 0, // Will calculate below
-                'payment_status' => $statuses[array_rand($statuses)],
-
-            ];
-
-        }
-        $sliced = array_slice($data, $start, $length);
-        
-        return response([
-            'draw' => intval($request->input('draw')),
-            'recordsTotal' => count($data),
-            'recordsFiltered' => count($data),
-            'data' => $sliced,
-        ]);
-    }
+   
 
     public function  initiateDataTableResponse($totalData,$query, $request)
     {
@@ -78,6 +60,23 @@ class ReportDataTable
             'recordsFiltered' => $totalData,
             'data' => $query,
         ]);
+    }
+    
+    public function getSalesSummary($request){
+        $length = $request->input('length') ?? 10; // 
+        $start = $request->input('start') ?? 0; //$offset = ($page - 1) * $length==start
+        // $totalData = DB::table('orders')->count();
+
+        $query = DB::table('orders')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->select('orders.id', 'orders.order_number','orders.subtotal', 'orders.payment_status', 'orders.created_at')
+            ->groupBy('orders.order_number')
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        return $this->initiateDataTableResponse($query->count(), $query, $request);
+           
     }
 
     
