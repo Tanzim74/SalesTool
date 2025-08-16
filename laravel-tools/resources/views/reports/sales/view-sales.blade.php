@@ -97,16 +97,7 @@
         // Custom JavaScript for this page
         $(document).ready(function() {
             $('.filter').on('change', function() {
-                const selectedFilter = $(this).val();
-                if (selectedFilter === 'custom') {
-                    //    $('.start_date, .end_date').attr( 'placeholder','yyyy-mm-dd');
-                    $('.start_date, .end_date').prop('disabled', false);
-                } else {
-                    $('.start_date, .end_date').prop('disabled', true);
-                    $('.start_date, .end_date').val('yyyy-mm-dd');
-                    $('.start_date, .end_date').attr('placeholder', 'yyyy-mm-dd');
-
-                }
+               
             });
         });
     </script>

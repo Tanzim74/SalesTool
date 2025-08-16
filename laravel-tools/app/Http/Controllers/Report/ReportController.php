@@ -53,11 +53,17 @@ class ReportController extends Controller
       
 
         $reportInstance =  $this->getReportInstance(0); // Assuming 0 is the report type for sales
+
+        $report_with_data_filtration = $reportInstance->filterType();
         
-        $reportData = $reportInstance->generateSalesReport( $request);
+        return $report_with_data_filtration;
+
+
+        
+        // $reportData = $reportInstance->generateSalesReport( $request);
         
         
-        return $reportData;
+        // return $reportData;
         // return $reportData;
         // return response()->json($reportData);
 
