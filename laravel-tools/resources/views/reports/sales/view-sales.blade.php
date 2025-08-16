@@ -93,94 +93,81 @@
             dateFormat: "Y-m-d"
         });
     </script>
+
+
     <script>
-        // Custom JavaScript for this page
         $(document).ready(function() {
-            $('.filter').on('change', function() {
-               
-            });
-        });
-    </script>
 
-    <script>
-        document.getElementById('loadReportBtn').addEventListener('click', function() {
-            const csrfToken = "{{ csrf_token() }}";
-            const startDate = document.querySelector('.start_date').value;
-            const endDate = document.querySelector('.end_date').value;
-            const filterType = document.querySelector('.filter').value;
-            const status = document.querySelector('.status').value;
-            
+            if ($.fn.DataTable.isDataTable('.salesTable')) {
+                $('.salesTable').DataTable().clear().destroy();
+            }
+            $('#loadReportBtn').click(function() {
+                const csrfToken = "{{ csrf_token() }}";
+                const startDate = document.querySelector('.start_date').value;
+                const endDate = document.querySelector('.end_date').value;
+                const filterType = document.querySelector('.filter').value;
+                const status = document.querySelector('.status').value;
 
-            fetch('/getColumns', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                    },
-                    body: JSON.stringify({
-                        reportType: 0,
-                        start_date: startDate,
-                        end_date: endDate,
-                        filter: filterType,
-                        class: status
+
+                fetch('/getColumns', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        },
+                        body: JSON.stringify({
+                            reportType: 0,
+                            start_date: startDate,
+                            end_date: endDate,
+                            filter: filterType,
+                            class: status
+                        })
                     })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log('Report data:', data);
-                    document.getElementById('attachment-table').innerHTML = data.html;
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('Report data:', data);
+                        document.getElementById('attachment-table').innerHTML = data.html;
 
-                    // Destroy existing DataTable if it exists
-                    // if ($.fn.DataTable.isDataTable('.salesTable')) {
-                    //     $('.salesTable').DataTable().destroy();
-                    // }
+                        // Destroy existing DataTable if it exists
+                        // if ($.fn.DataTable.isDataTable('.salesTable')) {
+                        //     $('.salesTable').DataTable().destroy();
+                        // }
 
 
-                    setTimeout(() => {
-                        const columnDefs = data.columnKeys.map(key => ({
-                            data: key,
+                        setTimeout(() => {
+                            const columnDefs = data.columnKeys.map(key => ({
+                                data: key,
 
-                        }));
+                            }));
+                            console.log("loaded");
+                            $('.salesTable').DataTable({
+                                processing: true,
+                                serverSide: true,
+                                ajax: { // Fix: Changed from 'ajax' to 'ajax'
+                                    url: '{{ route('sales.report.index') }}',
+                                    type: 'POST',
+                                    data: {
+                                        reportType: 0,
+                                        start_date: startDate,
+                                        end_date: endDate,
+                                        filter: filterType,
+                                        class: status,
+                                        _token: "{{ csrf_token() }}"
+                                    }
+                                },
+                                columns: columnDefs,
+                                searchable: false,
+                                orderable: false,
 
-                        $('.salesTable').DataTable({
-                            processing: true,
-                            serverSide: true,
-                            ajax: { // Fix: Changed from 'ajax' to 'ajax'
-                                url: '{{ route('sales.report.index') }}',
-                                type: 'POST',
-                                data: {
-                                    reportType: 0,
-                                    start_date: startDate,
-                                    end_date: endDate,
-                                    filter: filterType,
-                                    class: status,
-                                    _token: "{{ csrf_token() }}"
-                                }
-                            },
-                            columns: columnDefs,
-                            searchable: false,
-                            orderable: false,
+                            });
+                        }, 10);
+                    })
+                    .catch(err => {
+                        console.error('Fetch error:', err);
+                        document.getElementById('reportResult').innerText = 'Error loading report.';
+                    });
+            });
 
-                        });
-                    }, 10);
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    document.getElementById('reportResult').innerText = 'Error loading report.';
-                });
-        });
-    </script>
-
-    <script>
-        $('.salesTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '/search',
-                type: 'GET'
-            },
-            searchDelay: 500 // avoids too many queries while typing
-            columns: columnDefs
         });
     </script>
 @endpush

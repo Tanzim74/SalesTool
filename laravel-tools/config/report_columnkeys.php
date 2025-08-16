@@ -7,8 +7,8 @@ return [
             'columnkeys' => [
                 
                 0 => 'week_number',
-                1 => 'from',
-                2 => 'to',
+                1 => 'from_date',
+                2 => 'to_date',
                 3 => 'total_sales',
                
             ],

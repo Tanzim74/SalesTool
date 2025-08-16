@@ -36,6 +36,9 @@ class SalesReportService
 
     public function getWeeklySalesReport()
     {
+        if ($this->request->input('search')['value']) {
+           return $this->reportTable->getWeeklySearch($this->request);
+        }
         $start_date = $this->request->input('start_date');
         $end_date = $this->request->input('end_date');
 
@@ -44,16 +47,16 @@ class SalesReportService
         $start = $this->request->input('start', 0);
         $length = $this->request->input('length', 10);
         $weeklySales = [];
-
+        
         foreach ($period as $key => $weekstart) {
             $week_end = $weekstart->copy()->addDays(6);
             $total_amount =  DB::table('orders')
                 ->whereBetween('created_at', [$weekstart, $week_end])
                 ->sum('amount');
             $weeklySales[] = [
-                'week_number' => $key + 1,
-                'from' => $weekstart->format('Y-m-d'),
-                'to' => $week_end->format('Y-m-d'),
+                'week_number' => $weekstart->format('YW'),
+                'from_date' => $weekstart->format('Y-m-d'),
+                'to_date' => $week_end->format('Y-m-d'),
                 'total_sales' => $total_amount,
             ];
         }
@@ -65,31 +68,9 @@ class SalesReportService
     public function getMonthlySalesReport()
     {
         if ($this->request->input('search')['value']) {
-            $total = DB::table('orders')->count();
-
-            $query = DB::table('orders')
-                ->selectRaw("
-        
-                DATE_FORMAT(created_at, '%M %Y') as month_name,
-                MIN(DATE(created_at)) as from_date,
-                MAX(DATE(created_at)) as to_date,
-                SUM(amount) as total_sales
-            ")
-                ->whereBetween('created_at', [
-                    $this->request->input('start_date'),
-                    $this->request->input('end_date')
-                ])
-                
-                ->groupByRaw("DATE_FORMAT(created_at, '%M %Y')")
-                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $this->request->input('search')['value'] . '%'])
-                ->get();
-
-            return response([
-                'draw' => intval($this->request->input('draw')),
-                'recordsTotal' => $total,
-                'recordsFiltered' => $query->count(),
-                'data' => $query,
-            ]);
+           return  $this->reportTable->getMonthlySearch($this->request);
+    
+          
         }
         $start_date = $this->request->input('start_date');
         $end_date = $this->request->input('end_date');
@@ -134,7 +115,7 @@ class SalesReportService
 
         $filter_type = $this->request->input('filter');
         if ($filter_type == 'All') {
-            return $this->generateSalesReport($this->request);
+            return 'all';
         } elseif ($filter_type == 'weekly') {
 
             return $this->getWeeklySalesReport();

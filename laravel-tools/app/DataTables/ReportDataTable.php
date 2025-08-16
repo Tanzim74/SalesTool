@@ -46,10 +46,7 @@ class ReportDataTable
         ];
         // return $this->dataTables->queryBuilder($query);
     }
-
-    
-
-   
+  
 
     public function  initiateDataTableResponse($totalData,$query, $request)
     {
@@ -80,11 +77,68 @@ class ReportDataTable
     }
 
     
-
     public function reportType($type){
         
         $getReportType = config("report.report-type.$type");
         
         return $getReportType; 
+    }
+
+    public function getWeeklySearch($request){
+
+        $total = DB::table('orders')->count();
+
+            $query = DB::table('orders')
+                ->selectRaw("
+        
+                YEARWEEK(created_at,0) as week_number,
+                MIN(DATE(created_at)) as from_date,
+                MAX(DATE(created_at)) as to_date,
+                SUM(amount) as total_sales
+            ")
+                ->whereBetween('created_at', [
+                    $request->input('start_date'),
+                    $request->input('end_date')
+                ])
+
+                ->groupByRaw("YEARWEEK(created_at, 0)")
+                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $this->request->input('search')['value'] . '%'])
+                ->get();
+
+            return response([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $total,
+                'recordsFiltered' => $query->count(),
+                'data' => $query,
+            ]);
+    }
+
+    public function getMonthlySearch($request){
+
+          $total = DB::table('orders')->count();
+
+            $query = DB::table('orders')
+                ->selectRaw("
+        
+                DATE_FORMAT(created_at, '%M %Y') as month_name,
+                MIN(DATE(created_at)) as from_date,
+                MAX(DATE(created_at)) as to_date,
+                SUM(amount) as total_sales
+            ")
+                ->whereBetween('created_at', [
+                    $request->input('start_date'),
+                    $request->input('end_date')
+                ])
+
+                ->groupByRaw("DATE_FORMAT(created_at, '%M %Y')")
+                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $this->request->input('search')['value'] . '%'])
+                ->get();
+
+            return response([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $total,
+                'recordsFiltered' => $query->count(),
+                'data' => $query,
+            ]);
     }
 }
