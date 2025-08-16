@@ -17,9 +17,9 @@ return [
             
             'columnkeys' => [
                 
-                0 => 'month_number',
-                1 => 'from',
-                2 => 'to',
+                0 => 'month_name',
+                1 => 'from_date',
+                2 => 'to_date',
                 3 => 'total_sales',
             ],
             
