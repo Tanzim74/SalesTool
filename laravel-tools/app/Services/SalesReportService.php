@@ -68,7 +68,7 @@ class SalesReportService
 
         $filter_type = $this->request->input('filter');
         if ($filter_type == 'All') {
-            return 'all';
+            return $this->generateSalesReport($this->request);
         } elseif ($filter_type == 'weekly') {
 
            return $this->getWeeklySalesReport();
