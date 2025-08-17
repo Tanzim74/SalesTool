@@ -37,7 +37,6 @@ class ReportController extends Controller
     public function getColumns(Request $request)
     {
         
-
         return $this->datatable->initializeHeaders($request);
     }
 

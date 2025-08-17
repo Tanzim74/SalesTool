@@ -27,11 +27,11 @@
                 <div class="col-md-3 form-group mb-3">
                     <label for="picker2">Filter</label>
                     <select class="form-control form-control-rounded filter">
-                        <option selected value="custom">Custom Date</option>
+                        <option selected value="All">Daily</option>
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
-                        <option value="All">All</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="custom">Custom Date</option>
                     </select>
                 </div>
 

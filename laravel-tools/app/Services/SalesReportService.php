@@ -28,16 +28,12 @@ class SalesReportService
         $this->reportTable = $reportTable;
         $this->request = $request;
     }
-    public function generateSalesReport(Request $request)
-    {
-
-        return  $this->reportTable->getSalesSummary($this->request);
-    }
+   
 
     public function getWeeklySalesReport()
     {
         if ($this->request->input('search')['value']) {
-           return $this->reportTable->getWeeklySearch($this->request);
+            return $this->reportTable->getWeeklySearch($this->request);
         }
         $start_date = $this->request->input('start_date');
         $end_date = $this->request->input('end_date');
@@ -47,7 +43,7 @@ class SalesReportService
         $start = $this->request->input('start', 0);
         $length = $this->request->input('length', 10);
         $weeklySales = [];
-        
+
         foreach ($period as $key => $weekstart) {
             $week_end = $weekstart->copy()->addDays(6);
             $total_amount =  DB::table('orders')
@@ -68,9 +64,7 @@ class SalesReportService
     public function getMonthlySalesReport()
     {
         if ($this->request->input('search')['value']) {
-           return  $this->reportTable->getMonthlySearch($this->request);
-    
-          
+            return  $this->reportTable->getMonthlySearch($this->request);
         }
         $start_date = $this->request->input('start_date');
         $end_date = $this->request->input('end_date');
@@ -110,12 +104,32 @@ class SalesReportService
         return $this->reportTable->initiateDataTableResponse(count($monthlySales), $paginated_months, $this->request);
     }
 
+    public function getQuarterly(){
+        
+
+    }
+    public function getDailySales()
+    {
+        $length = $this->request->input('length') ?? 10; // 
+        $start = $this->request->input('start') ?? 0; //$offset = ($page - 1) * $length==start
+        // $totalData = DB::table('orders')->count();
+        $total_data = DB::table('orders');
+        $query = DB::table('orders')
+            ->select('id', 'created_at','amount')
+            ->whereBetween('created_at', [$this->request->start_date, $this->request->end_date])
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        return $this->reportTable->initiateDataTableResponse($total_data->count(), $query, $this->request);
+    }
+
     public function filterType()
     {
 
         $filter_type = $this->request->input('filter');
         if ($filter_type == 'All') {
-            return 'all';
+            return $this->getDailySales();
         } elseif ($filter_type == 'weekly') {
 
             return $this->getWeeklySalesReport();

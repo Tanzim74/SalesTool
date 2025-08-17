@@ -27,10 +27,8 @@ return [
         'all' => [
             'columnkeys' => [
                 0 => 'id',
-                1 => 'order_number',
-                2 => 'subtotal',
-                3 => 'payment_status',
-                4 => 'created_at'
+                1 => 'created_at',
+                2 => 'amount'
             ],
         ],
      

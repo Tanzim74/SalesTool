@@ -15,13 +15,11 @@ return [
             ],
         ],
         'all' => [
+            
             'columns' => [
                 0 => 'ID',
-                1 => 'ORDER_NUMBER',
-                2 => 'TOTAL AMOUNT',
-                3 => 'PAYMENT STATUS',
-                4 => 'DATE'
-                
+                1 => 'DATE',
+                2 => 'TOTAL SALES',
             ],
         ],
         'monthly' => [

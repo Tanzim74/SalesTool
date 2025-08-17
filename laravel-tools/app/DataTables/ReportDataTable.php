@@ -59,22 +59,7 @@ class ReportDataTable
         ]);
     }
     
-    public function getSalesSummary($request){
-        $length = $request->input('length') ?? 10; // 
-        $start = $request->input('start') ?? 0; //$offset = ($page - 1) * $length==start
-        // $totalData = DB::table('orders')->count();
-
-        $query = DB::table('orders')
-            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->select('orders.id', 'orders.order_number','orders.subtotal', 'orders.payment_status', 'orders.created_at')
-            ->groupBy('orders.order_number')
-            ->offset($start)
-            ->limit($length)
-            ->get();
-
-        return $this->initiateDataTableResponse($query->count(), $query, $request);
-           
-    }
+   
 
     
     public function reportType($type){
@@ -102,7 +87,7 @@ class ReportDataTable
                 ])
 
                 ->groupByRaw("YEARWEEK(created_at, 0)")
-                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $this->request->input('search')['value'] . '%'])
+                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $request->input('search')['value'] . '%'])
                 ->get();
 
             return response([
@@ -131,7 +116,7 @@ class ReportDataTable
                 ])
 
                 ->groupByRaw("DATE_FORMAT(created_at, '%M %Y')")
-                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $this->request->input('search')['value'] . '%'])
+                ->whereRaw("DATE_FORMAT(created_at, '%M %Y') LIKE ?", ['%' . $request->input('search')['value'] . '%'])
                 ->get();
 
             return response([
