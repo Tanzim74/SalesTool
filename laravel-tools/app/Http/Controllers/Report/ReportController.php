@@ -8,6 +8,7 @@ use App\Reports\ReportGenerationInterface;
 use App\Services\ReportManager;
 use App\DataTables\ReportDataTable;
 
+use App\Actions\Validations\ValidationService;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -17,11 +18,13 @@ class ReportController extends Controller
     protected $reportManager;
     protected $datatable;
     protected $request;
-    public function __construct(ReportManager $reportManager, ReportDataTable $datatable, Request $request)
+    protected $validation;
+    public function __construct(ReportManager $reportManager, ReportDataTable $datatable, Request $request , ValidationService $validation)
     {
         $this->request = $request;
         $this->datatable = $datatable;
         $this->reportManager = $reportManager;
+        $this->validation = $validation;
     }
 
    
@@ -37,7 +40,16 @@ class ReportController extends Controller
     public function getColumns(Request $request)
     {
         
-        return $this->datatable->initializeHeaders($request);
+       
+        $validation = $this->validation->validateSalesRequest($request); 
+        
+        if(isset($validation ) && $validation['status'] == 422 ){
+             return response()->json(['errors' => $validation['data']->errors()], 422);
+        }
+        else {
+
+            return $this->datatable->initializeHeaders($request);
+        }
     }
 
     public function viewSales()

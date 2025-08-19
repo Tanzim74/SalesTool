@@ -39,12 +39,12 @@ class ReportDataTable
         // $columnKeys = config("report_columnkeys.$reportType.weekly.columnkeys");
         
         $html = view('datatables.sales-datatable', compact('headers'))->render();
-
-        return [
+              // return $this->dataTables->queryBuilder($query);
+        return $data=[
             'columnKeys' => $columnKeys,
-            'html' => $html
+            'html' => $html,
+
         ];
-        // return $this->dataTables->queryBuilder($query);
     }
   
 
