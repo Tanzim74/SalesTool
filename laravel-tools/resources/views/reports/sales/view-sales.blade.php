@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="row remove_sales_table hide">
+    <div class="row remove_sales_table d-none">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
@@ -115,7 +115,7 @@
                 const status = document.querySelector('.status').value;
                 document.getElementById('error-start_date').innerText = '';
                 document.getElementById('error-end_date').innerText = '';
-                $('.remove_sales_table').hide();
+                $('.remove_sales_table').addClass('d-none');
                 document.querySelectorAll('.form-control').forEach(input => input.classList.remove('is-invalid'));
 
                 if ($.fn.DataTable.isDataTable('.table-responsive')) {
@@ -152,9 +152,7 @@
                                     document.getElementById('error-end_date').innerText = data.errors.end_date[0];
                                     document.querySelector('.end_date').classList.add('is-invalid');
                                 }
-                                $('.remove_sales_table').hide();
-
-
+                                
 
 
                             }
@@ -167,7 +165,7 @@
                     .then(data => {
                         console.log('Report data:', data);
                         document.getElementById('attachment-table').innerHTML = data.html;
-                        $('.remove_sales_table').show();
+                        $('.remove_sales_table').removeClass('d-none');
                         // Destroy existing DataTable if it exists
                         // if ($.fn.DataTable.isDataTable('.salesTable')) {
                         //     $('.salesTable').DataTable().destroy();
