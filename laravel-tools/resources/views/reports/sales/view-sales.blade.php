@@ -2,14 +2,22 @@
 @section('title', 'Dashboard')
 
 @section('content')
-
-
+    
     <div class="separator-breadcrumb border-top"></div>
     <div class="topic mb-5">
         <h2 style="text-align:center;"> Sales Demo </h2>
     </div>
 
-   
+    <div class="alert-box alert alert-warning alert-dismissible fade hide" role="alert">
+        <strong class="date-error" > </strong> 
+        
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+
+
     <div class="card" style="box-shadow: 0.5px 0.5px ">
         <div class="card-body">
             <div class="row ml-3 ">
@@ -141,7 +149,7 @@
                         const data = await response.json();
 
                         if (!response.ok) {
-                            if (response.status === 422) {
+                            if (response.status === 422 && data.type === 'date_validation') {
                                 // Show validation errors
 
                                 if (data.errors.start_date) {
@@ -152,10 +160,26 @@
                                     document.getElementById('error-end_date').innerText = data.errors.end_date[0];
                                     document.querySelector('.end_date').classList.add('is-invalid');
                                 }
-                                
+
 
 
                             }
+                            elseif(response.status === 422 && data.type === 'week_validation') {
+                                document.getElementById('error-start_date').innerText = data.data;
+                                document.querySelector('.start_date').classList.add('is-invalid');
+                                document.getElementById('error-end_date').innerText = data.data;
+                                document.querySelector('.end_date').classList.add('is-invalid');
+
+
+                            }
+                                    else if (response.status === 422 && data.type === 'month_validation') {
+                                document.getElementById('error-start_date').innerText = data.data;
+                                document.querySelector('.start_date').classList.add('is-invalid');
+                                document.getElementById('error-end_date').innerText = data.data;
+                                document.querySelector('.end_date').classList.add('is-invalid');
+                                
+                            }
+
                             throw new Error('Validation failed');
 
                         }
