@@ -9,7 +9,7 @@
     </div>
 
     <div class="alert-box alert alert-warning alert-dismissible fade hide" role="alert">
-        <strong class="date-error" > </strong> 
+        <strong class="date-error" ></strong> 
         
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -27,7 +27,9 @@
                 <div class="col-md-3 form-group mb-3">
                     <label for="picker2">Start Date</label>
                     <input class="form-control start_date" name="start_date" placeholder="yyyy-mm-dd" name="dp">
-                    <div class="text-danger small" id="error-start_date"></div>
+                    <div class="text-danger small" id="error-start_date">
+                        error message
+                    </div>
                 </div>
 
                 <div class="col-md-3 form-group mb-3">
@@ -55,12 +57,6 @@
                         <option value="2">Completed</option>
                     </select>
                 </div>
-
-
-
-
-
-
             </div>
 
             <div class="row">
@@ -69,6 +65,7 @@
                     </button>
                 </div>
             </div>
+            
         </div>
     </div>
 
@@ -151,11 +148,12 @@
                         if (!response.ok) {
                             if (response.status === 422 && data.type === 'date_validation') {
                                 // Show validation errors
-
+                               
                                 if (data.errors.start_date) {
                                     document.getElementById('error-start_date').innerText = data.errors.start_date[0];
                                     document.querySelector('.start_date').classList.add('is-invalid');
                                 }
+                                
                                 if (data.errors.end_date) {
                                     document.getElementById('error-end_date').innerText = data.errors.end_date[0];
                                     document.querySelector('.end_date').classList.add('is-invalid');
@@ -164,7 +162,7 @@
 
 
                             }
-                            elseif(response.status === 422 && data.type === 'week_validation') {
+                            else if(response.status === 422 && data.type === 'week_validation') {
                                 document.getElementById('error-start_date').innerText = data.data;
                                 document.querySelector('.start_date').classList.add('is-invalid');
                                 document.getElementById('error-end_date').innerText = data.data;

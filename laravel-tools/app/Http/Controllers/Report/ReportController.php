@@ -40,11 +40,14 @@ class ReportController extends Controller
     public function getColumns(Request $request)
     {
         
-       
+     
         $validation = $this->validation->validateSalesRequest($request); 
         
         if(isset($validation ) && $validation['status'] == 422 ){
-             return response()->json(['errors' => $validation['data']->errors()], 422);
+            
+             return response()->json(['errors' => $validation['data']->errors(),
+                                      'type' => $validation['type']           
+            ], 422 );
         }
         else {
 
