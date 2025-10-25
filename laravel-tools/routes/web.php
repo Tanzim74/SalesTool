@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\MedicineController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,4 +39,13 @@ Route::prefix('categories')->name('categories.')->group(function () {
     Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
     Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
 
+});
+
+Route::prefix('medicines')->name('medicines.')->group(function () {
+    Route::get('/', [MedicineController::class, 'index'])->name('index');
+    Route::get('/create', [MedicineController::class, 'create'])->name('create');
+    Route::post('/', [MedicineController::class, 'store'])->name('store');
+    Route::get('/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit');
+    Route::put('/{medicine}', [MedicineController::class, 'update'])->name('update');
+    Route::delete('/{medicine}', [MedicineController::class, 'destroy'])->name('destroy');
 });
