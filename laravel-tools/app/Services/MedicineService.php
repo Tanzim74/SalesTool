@@ -15,7 +15,7 @@ class MedicineService
 
     public function listAll()
     {
-        return $this->medicineRepository->getAll();
+        return $this->medicineRepository->getCompanies();
     }
 
     public function create(array $data)

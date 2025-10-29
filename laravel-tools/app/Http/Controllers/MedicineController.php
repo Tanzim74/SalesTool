@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Medicine;
 use App\Services\MedicineService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicineController extends Controller
 {
@@ -17,9 +18,12 @@ class MedicineController extends Controller
 
     public function index()
     {
-        $medicines = $this->medicineService->listAll();
-        return view('medicines.index', compact('medicines'));
+
+        $companies = $this->medicineService->listAll();
+        
+        return view('medicines.index', compact('companies'));
     }
+
 
     public function create()
     {

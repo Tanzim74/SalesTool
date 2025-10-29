@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Medicine;
-
+use App\Models\Company;
 class MedicineRepository
 {
     public function getAll()
@@ -30,5 +30,8 @@ class MedicineRepository
     public function delete(Medicine $medicine)
     {
         return $medicine->delete();
+    }
+    public function getCompanies(){
+        return Company::get();
     }
 }
