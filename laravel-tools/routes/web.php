@@ -25,27 +25,17 @@ Route::controller(ReportController::class)->group(function () {
     Route::post('/search', [ReportController::class, 'search']);
 });
 
-
-Route::get('/get-sales-summary', [ReportController::class, 'getSalesSummary'])
-    ->name('sales.summary');
-Route::get('/view-sales', [ReportController::class, 'viewSales'])->name('reports.sales');
-
-
-Route::prefix('categories')->name('categories.')->group(function () {
- Route::get('/', [CategoryController::class, 'index'])->name('index');
-    Route::get('/create', [CategoryController::class, 'create'])->name('create');
-    Route::post('/', [CategoryController::class, 'store'])->name('store');
-    Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('edit');
-    Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
-    Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
-
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
-Route::prefix('medicines')->name('medicines.')->group(function () {
-    Route::get('/', [MedicineController::class, 'index'])->name('index');
-    Route::get('/create', [MedicineController::class, 'create'])->name('create');
-    Route::post('/', [MedicineController::class, 'store'])->name('store');
-    Route::get('/{medicine}/edit', [MedicineController::class, 'edit'])->name('edit');
-    Route::put('/{medicine}', [MedicineController::class, 'update'])->name('update');
-    Route::delete('/{medicine}', [MedicineController::class, 'destroy'])->name('destroy');
+Route::middleware(['auth', 'role:teacher'])->group(function () {
+    Route::get('/teacher', [TeacherController::class, 'index'])->name('teacher.dashboard');
 });
+
+Route::middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/student', [StudentController::class, 'index'])->name('student.dashboard');
+});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
