@@ -61,9 +61,10 @@ Route::get('/classroom', [VideoController::class, 'index'])->name('classroom');
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/create', [AdminController::class, 'create'])->name('dashboards.admin.create');
     Route::post('/admin/register-teacher', [AdminController::class, 'registerTeacher'])->name('teachers.store');
-    Route::get('/admin/{id}/edit', [AdminController::class, 'edit'])->name('dashboards.admin.edit');
-    Route::put('/admin/{id}', [AdminController::class, 'update'])->name('dashboards.admin.update');
-    Route::delete('/admin/{id}', [AdminController::class, 'destroy'])->name('dashboards.admin.destroy');
+    Route::get('/admin/get-teachers', [AdminController::class, 'getAllTeachers'])->name('teachers.index');
+    Route::get('/admin/{id}/edit', [AdminController::class, 'edit'])->name('teachers.edit');
+    Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('teachers.update');
+    Route::delete('/admin/{id}', [AdminController::class, 'destroy'])->name('teachers.destroy');
     Route::get('/admin/teacher-registration', [AdminController::class, 'registrationPage'])->name('teachers.register');
 });
 

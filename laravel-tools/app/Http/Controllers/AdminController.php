@@ -19,7 +19,8 @@ class AdminController extends Controller
         return view('dashboards.admin');
     }
     public function getAllTeachers(){
-        
+       $teachers =  $this->teacher->getAllTeachers();
+         return view('teachers.index' , compact('teachers'));
     }
     public function registrationPage(){
         
@@ -27,17 +28,28 @@ class AdminController extends Controller
     }
     public function registerTeacher(){
         $this->teacher->createTeacher(request() , request()->all());
+
         return redirect()->back()->with('success', 'Teacher registered successfully!');
     }
     public function deleteTeacher(){
 
     }
-    public function updateTeacher() {
-
+    public function update($id) {
+        $this->teacher->updateTeacher(request(), $id);
+        return redirect()->back()->with('success', 'Teacher updated successfully!');
     }
+
     public function show(){
         dd(2);
     }
+
+    
+    public function edit($id)
+    {
+        $teacher = $this->teacher->editTeacher($id);
+        return view('teachers.edit', compact('teacher'));
+    }
+
     
 
     // Show all admins

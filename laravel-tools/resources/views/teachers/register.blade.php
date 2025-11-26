@@ -145,7 +145,7 @@
                 </div>
 
                 @error('password')
-                    <small class="text-danger">{{ $message }}</small>   
+                    <small class="text-danger">{{ $message }}</small>
                 @enderror
                 <!-- Submit -->
                 <button type="submit" class="btn btn-primary btn-block font-weight-bold mt-4 py-2"

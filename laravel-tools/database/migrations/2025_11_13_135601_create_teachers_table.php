@@ -22,7 +22,7 @@ return new class extends Migration
     $table->integer('age');
     $table->string('phone_number');
     $table->string('account_no', 5)->unique(); // 5 digit fixed
-    
+    $table->foreignId('user_id')->constrained()->onDelete('cascade');
     $table->timestamps();
 });
 }

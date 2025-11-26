@@ -17,6 +17,12 @@ class Teacher extends Model
     'age',
     'phone_number',
     'account_no',
+    'user_id'
     
 ];
+
+public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 }

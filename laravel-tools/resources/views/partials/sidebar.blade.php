@@ -80,6 +80,10 @@
                     <i class="nav-icon i-Users"></i>
                     <span class="item-name">Teacher Register</span>
                 </a>
+                <a href="{{ route('teachers.index') }}">
+                    <i class="nav-icon i-Users"></i>
+                    <span class="item-name">Teacher List</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a href="/users/roles">
