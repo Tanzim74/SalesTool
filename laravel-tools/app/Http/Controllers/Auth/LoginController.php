@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -26,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/dashboards.admin';
 
     /**
      * Create a new controller instance.
@@ -38,12 +39,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
     }
-
-     protected function authenticated(Request $request, $user)
+    public function showLoginForm()
     {
-        if($user->role_id == 1){
-            return redirect()->route('dashboards.admin');
+        if (auth()->check()) {
+            return redirect()->route('users.checkrole');
         }
-       
+        return view('auth.login');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+    
+    return redirect()->route('.checkrole');
+     
     }
 }

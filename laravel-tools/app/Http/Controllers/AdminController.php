@@ -3,76 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Admin\AdminRepositoryInterface;
+use App\Services\TeacherService;
 
 class AdminController extends Controller
 {
     protected $adminRepo;
+    protected $teacher;
 
-    public function __construct(AdminRepositoryInterface $adminRepo)
+    public function  __construct(TeacherService $teacher)
     {
-        $this->adminRepo = $adminRepo;
-        $this->middleware('auth');
+       $this->teacher = $teacher;
+        
     }
+    public function index(){
+        return view('dashboards.admin');
+    }
+    public function getAllTeachers(){
+        
+    }
+    public function registrationPage(){
+        
+       return view('teachers.register');
+    }
+    public function registerTeacher(){
+        $this->teacher->createTeacher(request() , request()->all());
+        return redirect()->back()->with('success', 'Teacher registered successfully!');
+    }
+    public function deleteTeacher(){
+
+    }
+    public function updateTeacher() {
+
+    }
+    public function show(){
+        dd(2);
+    }
+    
 
     // Show all admins
-    public function index()
-    {
-        $admins = $this->adminRepo->all();
-        return view('dashboards.admin.index', compact('admins'));
-    }
-
+   
     // Show single admin
-    public function show($id)
-    {
-        $admin = $this->adminRepo->find($id);
-        return view('dashboards.admin.show', compact('admin'));
-    }
+    
 
     // Create admin
-    public function create()
-    {
-        return view('dashboards.admin.create');
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admins,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $data['password'] = bcrypt($data['password']);
-
-        $this->adminRepo->create($data);
-
-        return redirect()->route('dashboards.admin')->with('success', 'Admin created successfully.');
-    }
-
-    // Edit admin
-    public function edit($id)
-    {
-        $admin = $this->adminRepo->find($id);
-        return view('dashboards.admin.edit', compact('admin'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admins,email,' . $id,
-        ]);
-
-        $this->adminRepo->update($id, $data);
-
-        return redirect()->route('dashboards.admin')->with('success', 'Admin updated successfully.');
-    }
-
-    // Delete admin
-    public function destroy($id)
-    {
-        $this->adminRepo->delete($id);
-        return redirect()->route('dashboards.admin')->with('success', 'Admin deleted successfully.');
-    }
+    
 }
